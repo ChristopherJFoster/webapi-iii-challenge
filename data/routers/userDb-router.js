@@ -74,32 +74,32 @@ router.delete('/:id', (req, res) => {
     });
 });
 
-// router.put('/', (req, res) => {
-//   if (!req.body.id || !req.body.changes) {
-//     res.status(400).json({
-//       error:
-//         'Please provide the ID of the post you intend to update as well as your intended changes.'
-//     });
-//   } else {
-//     postDb
-//       .update(req.body.id, req.body.changes)
-//       .then(post => {
-//         if (post) {
-//           res
-//             .status(200)
-//             .json({ message: 'You successfully updated the post.' });
-//         } else {
-//           res.status(404).json({
-//             message: 'The post with the specified ID does not exist.'
-//           });
-//         }
-//       })
-//       .catch(err => {
-//         res
-//           .status(500)
-//           .json({ error: 'The post information could not be updated.' });
-//       });
-//   }
-// });
+router.put('/', (req, res) => {
+  if (!req.body.id || !req.body.changes) {
+    res.status(400).json({
+      error:
+        'Please provide the ID of the user you intend to update as well as your intended changes.'
+    });
+  } else {
+    userDb
+      .update(req.body.id, req.body.changes)
+      .then(user => {
+        if (user) {
+          res
+            .status(200)
+            .json({ message: 'You successfully updated the user.' });
+        } else {
+          res.status(404).json({
+            message: 'The user with the specified ID does not exist.'
+          });
+        }
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: 'The user information could not be updated.' });
+      });
+  }
+});
 
 module.exports = router;
