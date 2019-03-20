@@ -82,30 +82,34 @@ router.delete('/:id', (req, res) => {
     });
 });
 
-// router.put('/:id', (req, res) => {
-//   const { title, contents } = req.body;
-//   if (!title || !contents) {
-//     res.status(400).json({
-//       errorMessage: 'Please provide title and contents for the post.'
-//     });
-//   } else {
-//     postDb
-//       .update(req.params.id, req.body)
-//       .then(post => {
-//         if (post) {
-//           res.status(200).json(req.body);
-//         } else {
-//           res.status(404).json({
-//             message: 'The post with the specified ID does not exist.'
-//           });
-//         }
-//       })
-//       .catch(err => {
-//         res
-//           .status(500)
-//           .json({ error: 'The post information could not be modified.' });
-//       });
-//   }
-// });
+router.put('/', (req, res) => {
+  console.log(req.body.id);
+  console.log(req.body.changes);
+  if (!req.body.id || !req.body.changes) {
+    res.status(400).json({
+      error:
+        'Please provide the ID of the post you intend to update as well as your intended changes.'
+    });
+  } else {
+    postDb
+      .update(req.body.id, req.body.changes)
+      .then(post => {
+        if (post) {
+          res
+            .status(200)
+            .json({ message: 'You successfully updated the post.' });
+        } else {
+          res.status(404).json({
+            message: 'The post with the specified ID does not exist.'
+          });
+        }
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: 'The post information could not be updated.' });
+      });
+  }
+});
 
 module.exports = router;
