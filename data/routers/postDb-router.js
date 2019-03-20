@@ -1,23 +1,32 @@
 const router = require('express').Router();
 
 const postDb = require('../helpers/postDb');
+const userDb = require('../helpers/userDb');
 
 router.post('/', (req, res) => {
   const newPost = req.body;
-  if (newPost.id && newPost.text && newPost.user_id) {
-    postDb
-      .insert(newPost)
-      .then(post => {
-        res.status(201).json(post);
-      })
-      .catch(err => {
-        res.status(500).json({
-          error: 'There was an error while saving the post to the database'
-        });
-      });
+  if (newPost.text && newPost.user_id) {
+    userDb.getById(newPost.user_id).then(user => {
+      if (user) {
+        postDb
+          .insert(newPost)
+          .then(post => {
+            res.status(201).json(post);
+          })
+          .catch(err => {
+            res.status(500).json({
+              error: 'There was an error while saving the post to the database'
+            });
+          });
+      } else {
+        res
+          .status(404)
+          .json({ error: 'The user with the specified ID does not exist.' });
+      }
+    });
   } else {
     res.status(400).json({
-      errorMessage: 'Please provide title and contents for the post.'
+      error: 'Please provide a valid user_id and text for the post.'
     });
   }
 });
