@@ -55,24 +55,24 @@ router.get('/:id', (req, res) => {
     });
 });
 
-// router.delete('/:id', (req, res) => {
-//   postDb
-//     .remove(req.params.id)
-//     .then(numberOfPosts => {
-//       if (numberOfPosts === 1) {
-//         res
-//           .status(200)
-//           .json({ message: `Number of records deleted: ${numberOfPosts}` });
-//       } else {
-//         res
-//           .status(404)
-//           .json({ error: 'The post with the specified ID does not exist.' });
-//       }
-//     })
-//     .catch(err => {
-//       res.status(500).json({ error: 'The post could not be removed' });
-//     });
-// });
+router.delete('/:id', (req, res) => {
+  userDb
+    .remove(req.params.id)
+    .then(numberOfUsers => {
+      if (numberOfUsers === 1) {
+        res
+          .status(200)
+          .json({ message: `Number of records deleted: ${numberOfUsers}` });
+      } else {
+        res
+          .status(404)
+          .json({ error: 'The user with the specified ID does not exist.' });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'The user could not be removed' });
+    });
+});
 
 // router.put('/', (req, res) => {
 //   if (!req.body.id || !req.body.changes) {
