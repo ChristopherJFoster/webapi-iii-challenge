@@ -83,8 +83,6 @@ router.delete('/:id', (req, res) => {
 });
 
 router.put('/', (req, res) => {
-  console.log(req.body.id);
-  console.log(req.body.changes);
   if (!req.body.id || !req.body.changes) {
     res.status(400).json({
       error:

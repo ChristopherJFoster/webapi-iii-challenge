@@ -1,26 +1,27 @@
 const router = require('express').Router();
 
 const userDb = require('../helpers/userDb');
+const postDb = require('../helpers/postDb');
 
-// router.post('/', (req, res) => {
-//   const newPost = req.body;
-//   if (newPost.id && newPost.text && newPost.user_id) {
-//     postDb
-//       .insert(newPost)
-//       .then(post => {
-//         res.status(201).json(post);
-//       })
-//       .catch(err => {
-//         res.status(500).json({
-//           error: 'There was an error while saving the post to the database'
-//         });
-//       });
-//   } else {
-//     res.status(400).json({
-//       errorMessage: 'Please provide title and contents for the post.'
-//     });
-//   }
-// });
+router.post('/', (req, res) => {
+  if (req.body.name) {
+    userDb
+      .insert(req.body)
+      .then(user => {
+        res.status(201).json(user);
+      })
+      .catch(err => {
+        res.status(500).json({
+          error:
+            'There was an error while saving the user to the database. Try submitting a different name.'
+        });
+      });
+  } else {
+    res.status(400).json({
+      error: 'Please provide a name for the user.'
+    });
+  }
+});
 
 // router.get('/', (req, res) => {
 //   postDb
@@ -39,12 +40,12 @@ const userDb = require('../helpers/userDb');
 //   postDb
 //     .getById(req.params.id)
 //     .then(post => {
-//       if (post[0]) {
-//         res.status(200).json(post[0]);
+//       if (post) {
+//         res.status(200).json(post);
 //       } else {
 //         res
 //           .status(404)
-//           .json({ message: 'The post with the specified ID does not exist.' });
+//           .json({ error: 'The post with the specified ID does not exist.' });
 //       }
 //     })
 //     .catch(err => {
@@ -56,14 +57,16 @@ const userDb = require('../helpers/userDb');
 
 // router.delete('/:id', (req, res) => {
 //   postDb
-//     .finpostDbyId(req.params.id)
-//     .then(post => {
-//       if (post[0]) {
-//         postDb.remove(req.params.id).then(res.status(200).json(post[0]));
+//     .remove(req.params.id)
+//     .then(numberOfPosts => {
+//       if (numberOfPosts === 1) {
+//         res
+//           .status(200)
+//           .json({ message: `Number of records deleted: ${numberOfPosts}` });
 //       } else {
 //         res
 //           .status(404)
-//           .json({ message: 'The post with the specified ID does not exist.' });
+//           .json({ error: 'The post with the specified ID does not exist.' });
 //       }
 //     })
 //     .catch(err => {
@@ -71,18 +74,20 @@ const userDb = require('../helpers/userDb');
 //     });
 // });
 
-// router.put('/:id', (req, res) => {
-//   const { title, contents } = req.body;
-//   if (!title || !contents) {
+// router.put('/', (req, res) => {
+//   if (!req.body.id || !req.body.changes) {
 //     res.status(400).json({
-//       errorMessage: 'Please provide title and contents for the post.'
+//       error:
+//         'Please provide the ID of the post you intend to update as well as your intended changes.'
 //     });
 //   } else {
 //     postDb
-//       .update(req.params.id, req.body)
+//       .update(req.body.id, req.body.changes)
 //       .then(post => {
 //         if (post) {
-//           res.status(200).json(req.body);
+//           res
+//             .status(200)
+//             .json({ message: 'You successfully updated the post.' });
 //         } else {
 //           res.status(404).json({
 //             message: 'The post with the specified ID does not exist.'
@@ -92,7 +97,7 @@ const userDb = require('../helpers/userDb');
 //       .catch(err => {
 //         res
 //           .status(500)
-//           .json({ error: 'The post information could not be modified.' });
+//           .json({ error: 'The post information could not be updated.' });
 //       });
 //   }
 // });
