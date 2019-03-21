@@ -89,7 +89,7 @@ router.delete('/:id', (req, res) => {
   postDb
     .remove(req.params.id)
     .then(numberOfPosts => {
-      if (numberOfPosts === 1) {
+      if (numberOfPosts) {
         res
           .status(200)
           .json({ message: `Number of records deleted: ${numberOfPosts}` });
