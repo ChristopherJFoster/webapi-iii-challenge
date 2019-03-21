@@ -1,9 +1,9 @@
 const router = require('express').Router();
 
 const userDb = require('../helpers/userDb');
-const postDb = require('../helpers/postDb');
+const { allCapsPOST, allCapsPUT } = require('../custom_middleware/allCaps');
 
-router.post('/', (req, res) => {
+router.post('/', allCapsPOST, (req, res) => {
   if (req.body.name) {
     userDb
       .insert(req.body)
@@ -74,7 +74,7 @@ router.delete('/:id', (req, res) => {
     });
 });
 
-router.put('/', (req, res) => {
+router.put('/', allCapsPUT, (req, res) => {
   if (!req.body.id || !req.body.changes) {
     res.status(400).json({
       error:
