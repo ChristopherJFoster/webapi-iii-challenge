@@ -65,22 +65,24 @@ router.get('/:id', (req, res) => {
 
 // Since this function returns posts, I thought it belonged here in postDb-router.js rather than userDb-router.js
 router.get('/:id/all', (req, res) => {
-  userDb
-    .getUserPosts(req.params.id)
-    .then(posts => {
-      if (posts.length > 0) {
-        res.status(200).json(posts);
-      } else {
-        res
-          .status(404)
-          .json({ error: 'That user does not exist, or they have no posts.' });
-      }
-    })
-    .catch(err => {
+  userDb.getById(req.params.id).then(user => {
+    if (user) {
+      userDb
+        .getUserPosts(req.params.id)
+        .then(posts => {
+          res.status(200).json(posts);
+        })
+        .catch(err => {
+          res
+            .status(500)
+            .json({ error: 'The post information could not be retrieved.' });
+        });
+    } else {
       res
-        .status(500)
-        .json({ error: 'The post information could not be retrieved.' });
-    });
+        .status(404)
+        .json({ error: 'The user with the specified ID does not exist.' });
+    }
+  });
 });
 
 router.delete('/:id', (req, res) => {
